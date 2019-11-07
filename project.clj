@@ -1,4 +1,4 @@
-(defproject nha/citrus "3.2.3"
+(defproject nha/citrus "3.2.3-1"
   :description "State management library for Rum"
   :url "https://github.com/nha/citrus"
   :license {:name "Eclipse Public License"
@@ -17,7 +17,7 @@
                                   [binaryage/devtools "0.9.10"]
                                   [figwheel-sidecar "0.5.19"]
                                   [expound "0.7.1"]]
-                   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
+                   :repl-options {:nrepl-middleware [cider.piggieback/wrap-cljs-repl]}
                    :source-paths ["src" "dev"]}}
 
   :aliases {"cljs-test" ["do"
