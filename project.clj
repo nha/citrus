@@ -12,7 +12,7 @@
             [lein-figwheel "0.5.19" :exclusions [org.clojure/clojure]]
             [lein-doo "0.1.11"]]
 
-  :profiles {:dev {:dependencies [[com.cemerick/piggieback "0.2.2"]
+  :profiles {:dev {:dependencies [[cider/piggieback "0.4.2"]
                                   [nrepl "0.6.0"]
                                   [binaryage/devtools "0.9.10"]
                                   [figwheel-sidecar "0.5.19"]
