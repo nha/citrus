@@ -1,5 +1,5 @@
 (ns citrus.resolver-test
-  (:require [clojure.test :refer :all]
+  (:require [clojure.test :refer [deftest testing is]]
             [citrus.resolver :as resolver]))
 
 (deftest make-resolver
