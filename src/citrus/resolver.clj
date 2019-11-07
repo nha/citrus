@@ -8,12 +8,14 @@
 
   clojure.lang.IDeref
   (deref [_]
-    (let [[key & path] path
-          ;; why get ? what if resolver is a fn?
-          resolve (get resolver key (fn [] (throw (ex-info "Resolver not found" {:key key}))))]
+    (let [[key & path] path]
+      ;;
       ;; async by default - rum/reactive will deref again
-      (d/chain (resolve)
+      ;; resolver is a function now instead of a map
+      ;;
+      (d/chain (resolver key)
                (fn [data]
+                 (when-not data (println "resolver returned nil for " key))
                  (when state
                    (swap! state assoc key data))
                  data)
