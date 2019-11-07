@@ -64,7 +64,10 @@
 
     (queue-effects!
       queue
-      [cname event #((get controllers cname) event args (get %1 cname) %2)])
+      [cname event (fn [arg1 arg2]
+                     (if-let [controller (get controllers cname)]
+                       (controller event args (get arg1 cname) arg2)
+                       (throw (ex-info "controller does not exist" {:cname cname}))))])
 
     (schedule-update!
       batched-updates
