@@ -1,9 +1,6 @@
 (ns citrus.resolver
   (:require [manifold.deferred :as d]))
 
-;; changed from
-;; https://github.com/clj-commons/citrus/blob/master/src/citrus/resolver.clj
-
 (deftype Resolver [state resolver path reducer]
 
   clojure.lang.IDeref
@@ -13,16 +10,18 @@
       ;; async by default - rum/reactive will deref again
       ;; resolver is a function now instead of a map
       ;;
-      (d/chain (resolver key)
-               (fn [data]
-                 (when-not data (println "resolver returned nil for " key))
-                 (when state
-                   (swap! state assoc key data))
-                 data)
-               (fn [data]
-                 (if reducer
-                   (reducer (get-in data path))
-                   (get-in data path))))))
+      (if-let [resolver-fn (resolver key)]
+        (d/chain (resolver-fn)
+                 (fn [data]
+                   (when-not data (println "resolver returned nil for " key))
+                   (when state
+                     (swap! state assoc key data))
+                   data)
+                 (fn [data]
+                   (if reducer
+                     (reducer (get-in data path))
+                     (get-in data path))))
+        (d/error-deferred (ex-info "missing resolver-fn for" {:key key})))))
 
   clojure.lang.IRef
   (setValidator [this vf]
