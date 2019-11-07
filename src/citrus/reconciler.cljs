@@ -66,7 +66,12 @@
       queue
       [cname event (fn [arg1 arg2]
                      (if-let [controller (get controllers cname)]
-                       (controller event args (get arg1 cname) arg2)
+                       ;;(controller event args (get arg1 cname) arg2)
+                       (controller event
+                                   args
+                                   state ;; (get arg1 cname)
+                                   cname ;; pass cname?
+                                   arg2)
                        (throw (ex-info "controller does not exist" {:cname cname}))))])
 
     (schedule-update!
@@ -111,7 +116,10 @@
                    (assoc cofx key (apply (co-effects key) args)))
                  {}
                  cofx)
-          effects (ctrl event args (get @state cname) cofx)]
+          effects (ctrl event args
+                        @state cname
+                        ;;(get @state cname)
+                        cofx)]
       (m/doseq [effect effects]
         (let [[id effect] effect
               handler (get effect-handlers id)]
