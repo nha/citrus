@@ -53,4 +53,10 @@
                                :main          citrus.test-runner
                                :optimizations :none}}]}
 
-  :doo {:paths {:karma "./node_modules/karma/bin/karma"}})
+  :doo {:paths {:karma "./node_modules/karma/bin/karma"}}
+
+  :deploy-repositories [["clojars" {:url "https://clojars.org/repo"
+                                    :username :env/clojars_user
+                                    :password :env/clojars_pass
+                                    :sign-releases false}]]
+  )
