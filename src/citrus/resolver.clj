@@ -1,7 +1,7 @@
 (ns citrus.resolver
   (:require [manifold.deferred :as d]))
 
-(deftype Resolver [state resolver path reducer]
+(deftype Resolver [state resolvers path reducer]
 
   clojure.lang.IDeref
   (deref [_]
@@ -10,18 +10,19 @@
       ;; async by default - rum/reactive will deref again
       ;; resolver is a function now instead of a map
       ;;
-      (d/chain (resolver key)
-               (fn [data]
-                 (when-not data
-                   ;; make this an error?
-                   (println "resolver returned nil for " key))
-                 (when state
-                   (swap! state assoc key data))
-                 data)
-               (fn [data]
-                 (if reducer
-                   (reducer (get-in data path))
-                   (get-in data path))))))
+      (deref ;; TODO see if we can teach citrus/rum manifolds
+        (d/chain (resolvers key)
+                 (fn [data]
+                   (when-not data
+                     ;; make this an error?
+                     (println "resolver returned nil for " key))
+                   (when state
+                     (swap! state assoc key data))
+                   data)
+                 (fn [data]
+                   (if reducer
+                     (reducer (get-in data path))
+                     (get-in data path)))))))
 
   clojure.lang.IRef
   (setValidator [this vf]
@@ -39,5 +40,5 @@
   (removeWatch [this key]
     this))
 
-(defn make-resolver [state resolver path reducer]
-  (Resolver. state resolver path reducer))
+(defn make-resolver [state resolvers path reducer]
+  (Resolver. state resolvers path reducer))

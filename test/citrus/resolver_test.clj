@@ -10,16 +10,16 @@
 (deftest Resolver
   (testing "Should return resolved data when dereferenced"
     (let [r (resolver/make-resolver (atom {}) {:path 1} [:path] nil)]
-      (is (= @@r 1))))
+      (is (= @r 1))))
   (testing "Should return nested resolved data when dereferenced"
     (let [r (resolver/make-resolver (atom {}) {:path {:value 1}} [:path :value] nil)]
-      (is (= @@r 1))))
+      (is (= @r 1))))
   (testing "Should apply reducer to resolved data when dereferenced"
     (let [r (resolver/make-resolver (atom {}) {:path 1} [:path] inc)]
-      (is (= @@r 2))))
+      (is (= @r 2))))
   (testing "Should apply reducer to nested resolved data when dereferenced"
     (let [r (resolver/make-resolver (atom {}) {:path {:value 1}} [:path :value] inc)]
-      (is (= @@r 2))))
+      (is (= @r 2))))
   (testing "Should populate state with resolved data after dereferencing"
     (let [state (atom {})]
       @(resolver/make-resolver state {:path 1} [:path] nil)
