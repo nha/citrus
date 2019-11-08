@@ -1,4 +1,4 @@
-(defproject nha/citrus "3.2.3-1"
+(defproject nha/citrus "3.2.3-2"
   :description "State management library for Rum"
   :url "https://github.com/nha/citrus"
   :license {:name "Eclipse Public License"
