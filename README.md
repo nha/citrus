@@ -1,6 +1,12 @@
 FORK differences
-- controllers get the full state (BREAKING)
-- resolvers are asynchronous (manifold) and get better errors
+- controllers get the full state and return the full state too (BREAKING)
+Example
+```
+(defmulti router-ctrl (fn [action args state cname cofx] action))
+;; [:push bidi-args {:full-state ...} :router {}]
+```
+- resolvers is now a function instead of a map, and the result can be asynchronous (manifold). Also better errors
+
 
 *__Scrum is now Citrus__ as of v3.0.0 to avoid confusion with Agile term “Scrum”. Older versions are still available under the old name **Scrum**. To migrate to v3.0.0+ replace all occurrences of **scrum** with **citrus**.*
 
