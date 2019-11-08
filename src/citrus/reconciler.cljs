@@ -66,7 +66,7 @@
       queue
       [cname event (fn [state cofx]
                      (let [controller (get controllers cname)]
-                       ;;(controller event args (get arg1 cname) arg2)
+                       ;;nha (controller event args (get arg1 cname) arg2)
                        (controller event
                                    args
                                    state
@@ -99,7 +99,7 @@
                         (when-let [handler (get effect-handlers id)]
                           (handler this cname effect))))
                     (if (contains? effects :state)
-                      (recur ;;(assoc st cname (:state effects))
+                      (recur ;;nha (assoc st cname (:state effects))
                         (:state effects) ;; NOTE: this allows controllers to set the whole state too!
                         events)
                       (recur st events)))
@@ -130,7 +130,7 @@
             (when-let [spec (s/get-spec id)]
               (s/assert spec effect)))
           (cond
-            (= id :state) (swap! state assoc cname effect)
+            (= id :state) (reset! state effect) ;;nha (swap! state assoc cname effect)
             handler (handler this cname effect)
             :else nil)))))
 
