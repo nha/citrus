@@ -64,14 +64,14 @@
 
     (queue-effects!
       queue
-      [cname event (fn [arg1 arg2]
+      [cname event (fn [state cofx]
                      (if-let [controller (get controllers cname)]
                        ;;(controller event args (get arg1 cname) arg2)
                        (controller event
                                    args
-                                   state ;; (get arg1 cname)
-                                   cname ;; pass cname?
-                                   arg2)
+                                   state
+                                   cname
+                                   cofx)
                        (throw (ex-info "controller does not exist" {:cname cname}))))])
 
     (schedule-update!
