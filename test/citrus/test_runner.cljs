@@ -1,5 +1,5 @@
 (ns citrus.test-runner
-  (:require [doo.runner :refer-macros [doo-tests]]
-            [citrus.core-test]))
+  (:require-macros [doo.runner :refer [doo-tests]])
+  (:require [citrus.core-test]))
 
 (doo-tests 'citrus.core-test)

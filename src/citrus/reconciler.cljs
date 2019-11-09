@@ -64,7 +64,14 @@
 
     (queue-effects!
       queue
-      [cname event #((get controllers cname) event args (get %1 cname) %2)])
+      [cname event (fn [state cofx]
+                     (let [controller (get controllers cname)]
+                       ;;nha (controller event args (get arg1 cname) arg2)
+                       (controller event
+                                   args
+                                   state
+                                   cname
+                                   cofx)))])
 
     (schedule-update!
       batched-updates
@@ -92,7 +99,9 @@
                         (when-let [handler (get effect-handlers id)]
                           (handler this cname effect))))
                     (if (contains? effects :state)
-                      (recur (assoc st cname (:state effects)) events)
+                      (recur ;;nha (assoc st cname (:state effects))
+                        (:state effects) ;; NOTE: this allows controllers to set the whole state too!
+                        events)
                       (recur st events)))
                   st))]
           (reset! state next-state)))))
@@ -108,7 +117,12 @@
                    (assoc cofx key (apply (co-effects key) args)))
                  {}
                  cofx)
-          effects (ctrl event args (get @state cname) cofx)]
+          effects (ctrl event
+                        args
+                        @state
+                        cname
+                        ;;(get @state cname)
+                        cofx)]
       (m/doseq [effect effects]
         (let [[id effect] effect
               handler (get effect-handlers id)]
@@ -116,7 +130,7 @@
             (when-let [spec (s/get-spec id)]
               (s/assert spec effect)))
           (cond
-            (= id :state) (swap! state assoc cname effect)
+            (= id :state) (reset! state effect) ;;nha (swap! state assoc cname effect)
             handler (handler this cname effect)
             :else nil)))))
 
